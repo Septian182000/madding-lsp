@@ -2,15 +2,10 @@ import { useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import imgArticle from "../../assets/image/article.png";
-import {
-  faComments,
-  faTrash,
-  faCirclePlus,
-  faBookOpen,
-} from "@fortawesome/free-solid-svg-icons";
+import { faComments, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { ModalDelete } from "./ModalDelete";
 
-export const ListArticle = ({ data }) => {
+export const ListArticle = ({ data, logged }) => {
   const [totalComment, setTotalComment] = useState(10);
 
   // show modal delete
@@ -58,22 +53,26 @@ export const ListArticle = ({ data }) => {
                   {data.judul}
                 </span>
               </Col>
-              <Col lg={"auto"}>
-                <FontAwesomeIcon
-                  icon={faTrash}
-                  size="xl"
-                  style={{
-                    color: "red",
-                    cursor: "pointer",
-                    marginTop: 7,
-                    marginRight: 7,
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setModalDelete(true);
-                  }}
-                />
-              </Col>
+              {logged === "admin" ? (
+                <Col lg={"auto"}>
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    size="xl"
+                    style={{
+                      color: "red",
+                      cursor: "pointer",
+                      marginTop: 7,
+                      marginRight: 7,
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setModalDelete(true);
+                    }}
+                  />
+                </Col>
+              ) : (
+                ""
+              )}
             </Row>
             <Row className="mt-2">
               <div

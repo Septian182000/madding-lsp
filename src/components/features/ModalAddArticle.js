@@ -13,8 +13,6 @@ export const ModalAddArticle = ({ isOpen, closeModal }) => {
     setInput({ ...input, image: URL.createObjectURL(file) });
   };
 
-  console.log(input);
-
   return (
     <ModalsView
       closeModal={closeModal}
@@ -71,7 +69,7 @@ export const ModalAddArticle = ({ isOpen, closeModal }) => {
               </Row>
             </Col>
             <Col fluid></Col>
-            <Col lg={"auto"} style={{ marginRight: 50 }}>
+            <Col lg={"auto"} style={{ marginRight: 20 }}>
               {input.image && (
                 <Avatar
                   picture={input.image}

@@ -2,7 +2,10 @@ import { Container, Col, Row } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCirclePlus,
+  faArrowRightFromBracket,
+} from "@fortawesome/free-solid-svg-icons";
 import { SearchTextField } from "../components/textFields/SearchTextField";
 import icSearch from "../assets/icons/icSearch.png";
 import { LoadingView } from "../components/loading/LoadingViews";
@@ -15,7 +18,7 @@ import {
   getArticleStatus,
 } from "../lib/state_manager/reducers/articleSlice";
 
-export default function Home() {
+export default function Home({ user, logged }) {
   // redux
   const dispatch = useDispatch();
   const articleData = useSelector(selectArticleData);
@@ -33,6 +36,14 @@ export default function Home() {
   const [modalAdd, setModalAdd] = useState(false);
   const handleCloseModal = () => {
     setModalAdd((val) => !val);
+  };
+  //
+
+  // logout
+  const handleLogout = () => {
+    sessionStorage.removeItem("role");
+    sessionStorage.removeItem("role_name");
+    window.location.reload();
   };
   //
 
@@ -73,7 +84,23 @@ export default function Home() {
   return (
     <Container className="mt-5">
       <ModalAddArticle isOpen={modalAdd} closeModal={handleCloseModal} />
-
+      {logged === "admin" ? (
+        <Row style={{ fontFamily: "Rubik", fontWeight: 600, fontSize: 20 }}>
+          <Col lg={"auto"}>
+            <span>Hello, {user}</span>
+          </Col>
+          <Col>
+            <FontAwesomeIcon
+              icon={faArrowRightFromBracket}
+              size="xl"
+              style={{ cursor: "pointer" }}
+              onClick={handleLogout}
+            />
+          </Col>
+        </Row>
+      ) : (
+        ""
+      )}
       <Row className="justify-content-center">
         <SearchTextField
           width={400}
@@ -84,42 +111,46 @@ export default function Home() {
           setGetSearch={setGetSearch}
         />
       </Row>
-      <Row className="mt-5 justify-content-end">
-        <Col
-          lg={"auto"}
-          style={{
-            borderRadius: 10,
-            border: "2px solid black",
-            display: "flex",
-            color: "black",
-            fontFamily: "Rubik",
-            fontWeight: 600,
-            padding: 8,
-            cursor: "pointer",
-          }}
-          onClick={() => {
-            setModalAdd(true);
-          }}
-        >
-          <FontAwesomeIcon
-            icon={faCirclePlus}
+      {logged === "admin" ? (
+        <Row className="mt-5 justify-content-end">
+          <Col
+            lg={"auto"}
             style={{
-              width: 25,
-              height: 25,
-              color: "green",
+              borderRadius: 10,
+              border: "2px solid black",
+              display: "flex",
+              color: "black",
+              fontFamily: "Rubik",
+              fontWeight: 600,
+              padding: 8,
               cursor: "pointer",
-              marginRight: 7,
             }}
-          />
-          <span>Tambah</span>
-        </Col>
-      </Row>
+            onClick={() => {
+              setModalAdd(true);
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faCirclePlus}
+              style={{
+                width: 25,
+                height: 25,
+                color: "green",
+                cursor: "pointer",
+                marginRight: 7,
+              }}
+            />
+            <span>Tambah</span>
+          </Col>
+        </Row>
+      ) : (
+        ""
+      )}
       <Row className="mb-4">
         {isLoading ? (
           <LoadingView height={400} width={"100%"} />
         ) : (
           articleSlice.map((data, index) => (
-            <ListArticle key={index} data={data} />
+            <ListArticle key={index} data={data} logged={logged} />
           ))
         )}
       </Row>
