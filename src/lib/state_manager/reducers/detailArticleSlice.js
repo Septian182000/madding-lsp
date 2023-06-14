@@ -6,7 +6,7 @@ export const getDetailArticle = createAsyncThunk(
   async ({ id }) => {
     const apiURL = `detail-article/${id}`;
     const response = await axiosInstance.get(apiURL);
-    return response.data;
+    return response.data.data;
   }
 );
 

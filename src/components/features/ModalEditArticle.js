@@ -100,7 +100,6 @@ export const ModalEditArticle = ({
                       border: "1px solid black",
                     }}
                     onClick={() => {
-                      setInput({});
                       closeModal();
                     }}
                   >

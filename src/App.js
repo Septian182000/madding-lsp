@@ -52,7 +52,7 @@ function App() {
           exact
           element={
             <Provider store={dataStrore}>
-              <ArticleDetail />
+              <ArticleDetail logged={logged} />
             </Provider>
           }
         />
