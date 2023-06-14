@@ -8,6 +8,7 @@ import {
   faComments,
   faTrash,
   faPenToSquare,
+  faBookOpenReader,
 } from "@fortawesome/free-solid-svg-icons";
 import { ModalDelete } from "./ModalDelete";
 import { ModalEditArticle } from "./ModalEditArticle";
@@ -58,9 +59,6 @@ export const ListArticle = ({ data, logged }) => {
             borderRadius: 10,
             border: "1px solid black",
             display: "flex",
-          }}
-          onClick={() => {
-            navigate(`/article-detail/${data.id}`);
           }}
         >
           <div
@@ -165,10 +163,34 @@ export const ListArticle = ({ data, logged }) => {
               </div>
             </Row>
             <Row
-              className="mt-3 mb-3 me-1 "
+              className="mt-3 mb-3 me-1"
               style={{ justifyContent: "space-between" }}
             >
-              <Col lg={"auto"}></Col>
+              <Col
+                lg={"auto"}
+                className="d-flex ms-3"
+                style={{
+                  backgroundColor: "green",
+                  cursor: "pointer",
+                  padding: 6,
+                  borderRadius: 7,
+                  color: "white",
+                }}
+                onClick={() => {
+                  navigate(`/article-detail/${data.id}`);
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faBookOpenReader}
+                  size="xl"
+                  style={{
+                    marginRight: 5,
+                    fontFamily: "Rubik",
+                    fontWeight: 600,
+                  }}
+                />
+                <span style={{ fontSize: 18 }}>Baca Selengkapnya</span>
+              </Col>
               <Col lg={"auto"} className="d-flex">
                 <FontAwesomeIcon
                   icon={faComments}

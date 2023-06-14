@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import articleReducer from "./reducers/articleSlice";
 import loginReducer from "./reducers/loginSlice";
+import articleReducer from "./reducers/articleSlice";
+import detailArticleReducer from "./reducers/detailArticleSlice";
 
 export const dataStrore = configureStore({
   reducer: {
-    articleData: articleReducer,
     loginData: loginReducer,
+    articleData: articleReducer,
+    detailArticleData: detailArticleReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
