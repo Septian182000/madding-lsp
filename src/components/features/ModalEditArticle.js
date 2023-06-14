@@ -3,22 +3,27 @@ import { useDispatch } from "react-redux";
 import { ModalsView } from "../modals/ModalViews";
 import { Row, Col } from "react-bootstrap";
 import { NormalTextField } from "../textFields/NormalTextFields";
-import { Avatar } from "../imageViewer/Avatar";
-import { TextEditor } from "../textFields/TextEditor";
-import { storeArticle } from "../../lib/state_manager/reducers/articleSlice";
+import { editArticle } from "../../lib/state_manager/reducers/articleSlice";
 
-export const ModalAddArticle = ({ isOpen, closeModal, userID }) => {
+export const ModalEditArticle = ({
+  isOpen,
+  closeModal,
+  dataID,
+  dataTitle,
+  dataContent,
+  dataImage,
+}) => {
   const dispatch = useDispatch();
   const [input, setInput] = useState({});
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    setInput({ ...input, image: URL.createObjectURL(file) });
-  };
-
   useEffect(() => {
-    setInput({ ...input, admin_id: userID });
-  }, [userID]);
+    setInput({
+      ...input,
+      title: dataTitle,
+      content: dataContent,
+      image_url: dataImage,
+    });
+  }, [dataTitle, dataContent, dataImage]);
 
   return (
     <ModalsView
@@ -34,7 +39,7 @@ export const ModalAddArticle = ({ isOpen, closeModal, userID }) => {
             style={{ textAlign: "center" }}
           >
             <span style={{ color: "white", fontSize: 24, marginBottom: 20 }}>
-              Insert New Article
+              Edit The Article
             </span>
           </Row>
           <Row className="mb-4">
@@ -117,8 +122,7 @@ export const ModalAddArticle = ({ isOpen, closeModal, userID }) => {
                     }}
                     onClick={() => {
                       if (input.title && input.image_url && input.content) {
-                        dispatch(storeArticle({ newData: input }));
-                        setInput({});
+                        dispatch(editArticle({ id: dataID, newData: input }));
                         closeModal();
                       }
                     }}

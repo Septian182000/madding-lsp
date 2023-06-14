@@ -5,6 +5,7 @@ export const Avatar = ({ picture, size }) => {
         width: size,
         height: size,
         borderRadius: size * 0.5,
+        border: "1px solid black",
         objectFit: "cover",
         backgroundColor: "#D9D9D9",
       }}

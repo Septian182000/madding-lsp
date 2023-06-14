@@ -1,8 +1,10 @@
 import { ModalsView } from "../modals/ModalViews";
 import { Row, Col } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import icTrash from "../../assets/icons/icTrash2.png";
 
-export const ModalDelete = ({ isOpen, closeModal, onDelete }) => {
+export const ModalLogout = ({ isOpen, closeModal, onLogout }) => {
   return (
     <ModalsView
       closeModal={closeModal}
@@ -20,11 +22,15 @@ export const ModalDelete = ({ isOpen, closeModal, onDelete }) => {
         >
           <Row className="mb-4">
             <div className="d-flex" style={{ justifyContent: "center" }}>
-              <img
+              <FontAwesomeIcon
+                icon={faTriangleExclamation}
+                style={{ height: 70, color: "yellow" }}
+              />
+              {/* <img
                 src={icTrash}
                 alt="trash"
                 style={{ width: 69, height: 76 }}
-              />
+              /> */}
             </div>
           </Row>
           <Row className="mb-4">
@@ -38,7 +44,7 @@ export const ModalDelete = ({ isOpen, closeModal, onDelete }) => {
                 lineHeight: 1.3,
               }}
             >
-              <span>Do you want to delete ?</span>
+              <span>Do you want to logout ?</span>
             </div>
           </Row>
           <div className="d-flex justify-content-center gap-3">
@@ -74,11 +80,11 @@ export const ModalDelete = ({ isOpen, closeModal, onDelete }) => {
                   border: "1px solid black",
                 }}
                 onClick={() => {
-                  onDelete();
+                  onLogout();
                   closeModal();
                 }}
               >
-                <span>Delete</span>
+                <span>Yes</span>
               </button>
             </div>
           </div>

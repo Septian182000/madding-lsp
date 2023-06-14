@@ -12,13 +12,15 @@ import { LoadingView } from "../components/loading/LoadingViews";
 import { ListArticle } from "../components/features/ListArticle";
 import { Pagination } from "../components/modules/Pagination";
 import { ModalAddArticle } from "../components/features/ModalAddArticle";
+import { ModalLogout } from "../components/features/ModalLogout";
+import imgNotFound from "../assets/image/notFound.png";
 import {
   getArticle,
   selectArticleData,
   getArticleStatus,
 } from "../lib/state_manager/reducers/articleSlice";
 
-export default function Home({ user, logged }) {
+export default function Home({ user, userID, logged }) {
   // redux
   const dispatch = useDispatch();
   const articleData = useSelector(selectArticleData);
@@ -39,10 +41,18 @@ export default function Home({ user, logged }) {
   };
   //
 
+  // show modal logout
+  const [modalLogout, setModalLogout] = useState(false);
+  const handleCloseModalLogout = () => {
+    setModalLogout((val) => !val);
+  };
+  //
+
   // logout
   const handleLogout = () => {
     sessionStorage.removeItem("role");
     sessionStorage.removeItem("role_name");
+    sessionStorage.removeItem("id_admin");
     window.location.reload();
   };
   //
@@ -68,22 +78,49 @@ export default function Home({ user, logged }) {
   //
 
   useEffect(() => {
-    dispatch(getArticle());
-  }, [dispatch]);
+    dispatch(getArticle({ search: getSearch }));
+  }, [dispatch, getSearch]);
 
   useEffect(() => {
     if (articleStatus === "success" && articleData) {
-      const startIndex = paginationState.currentPage * filter.page;
-      const lastIndex = startIndex + filter.page;
+      if (
+        articleData.data === "Success create article" ||
+        articleData.data === "Success delete article" ||
+        articleData.data === "Success update article"
+      ) {
+        dispatch(getArticle({ search: getSearch }));
+      }
+    }
+  }, [dispatch, articleStatus, articleData, getSearch]);
 
-      setArticleSlice(articleData.slice(startIndex, lastIndex));
-      setIsLoading(false);
+  useEffect(() => {
+    if (articleStatus === "success" && articleData) {
+      if (
+        articleData.data !== "Success create article" &&
+        articleData.data !== "Success delete article" &&
+        articleData.data !== "Success update article"
+      ) {
+        const startIndex = paginationState.currentPage * filter.page;
+        const lastIndex = startIndex + filter.page;
+
+        setArticleSlice(articleData.data.slice(startIndex, lastIndex));
+        setIsLoading(false);
+      }
     }
   }, [articleStatus, articleData, paginationState, filter]);
 
   return (
     <Container className="mt-5">
-      <ModalAddArticle isOpen={modalAdd} closeModal={handleCloseModal} />
+      <ModalAddArticle
+        isOpen={modalAdd}
+        closeModal={handleCloseModal}
+        userID={userID}
+      />
+      <ModalLogout
+        isOpen={modalLogout}
+        closeModal={handleCloseModalLogout}
+        onLogout={handleLogout}
+      />
       {logged === "admin" ? (
         <Row style={{ fontFamily: "Rubik", fontWeight: 600, fontSize: 20 }}>
           <Col lg={"auto"}>
@@ -94,7 +131,9 @@ export default function Home({ user, logged }) {
               icon={faArrowRightFromBracket}
               size="xl"
               style={{ cursor: "pointer" }}
-              onClick={handleLogout}
+              onClick={() => {
+                setModalLogout(true);
+              }}
             />
           </Col>
         </Row>
@@ -111,8 +150,24 @@ export default function Home({ user, logged }) {
           setGetSearch={setGetSearch}
         />
       </Row>
-      {logged === "admin" ? (
-        <Row className="mt-5 justify-content-end">
+
+      <Row className="mt-5 " style={{ justifyContent: "space-between" }}>
+        <Col
+          lg={"auto"}
+          style={{
+            marginLeft: "15%",
+            fontFamily: "Rubik",
+            fontWeight: 600,
+            fontSize: 20,
+            marginTop: 20,
+          }}
+        >
+          Total :{" "}
+          <span style={{ color: "green" }}>
+            {articleStatus === "success" ? articleData.data.length ?? 0 : 0}
+          </span>
+        </Col>
+        {logged === "admin" ? (
           <Col
             lg={"auto"}
             style={{
@@ -122,7 +177,7 @@ export default function Home({ user, logged }) {
               color: "black",
               fontFamily: "Rubik",
               fontWeight: 600,
-              padding: 8,
+              padding: 11,
               cursor: "pointer",
             }}
             onClick={() => {
@@ -141,28 +196,75 @@ export default function Home({ user, logged }) {
             />
             <span>Tambah</span>
           </Col>
+        ) : (
+          ""
+        )}
+      </Row>
+      <Row className="mb-4">
+        {isLoading ? (
+          <LoadingView height={400} width={"100%"} />
+        ) : articleData.data.length > 0 ? (
+          articleSlice.map((data, index) => (
+            <ListArticle key={index} data={data} logged={logged} />
+          ))
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: 40,
+              marginBottom: 20,
+            }}
+          >
+            <figure>
+              <img
+                style={{
+                  height: 250,
+                }}
+                src={imgNotFound}
+                alt="not-found"
+              />
+              <figcaption className="text-center mt-4">
+                <span
+                  style={{
+                    color: "black",
+                    fontFamily: "Rubik",
+                    fontSize: 24,
+                    fontWeight: 600,
+                  }}
+                >
+                  No result found
+                </span>
+              </figcaption>
+              <figcaption className="text-center" style={{ marginTop: 10 }}>
+                <span
+                  style={{
+                    color: "#90909C",
+                    fontFamily: "Rubik",
+                    fontSize: 17,
+                    fontWeight: 600,
+                  }}
+                >
+                  The data is empty
+                </span>
+              </figcaption>
+            </figure>
+          </div>
+        )}
+      </Row>
+      {articleSlice.length > 0 ? (
+        <Row className="mb-5 justify-content-center">
+          <Col lg={"auto"}>
+            <Pagination
+              currentPage={paginationState.currentPage}
+              onPageChange={onPageChange}
+              pageCount={Math.ceil(articleData.data.length / filter.page)}
+            />
+          </Col>
         </Row>
       ) : (
         ""
       )}
-      <Row className="mb-4">
-        {isLoading ? (
-          <LoadingView height={400} width={"100%"} />
-        ) : (
-          articleSlice.map((data, index) => (
-            <ListArticle key={index} data={data} logged={logged} />
-          ))
-        )}
-      </Row>
-      <Row className="mb-5 justify-content-center">
-        <Col lg={"auto"}>
-          <Pagination
-            currentPage={paginationState.currentPage}
-            onPageChange={onPageChange}
-            pageCount={Math.ceil(articleData.length / filter.page)}
-          />
-        </Col>
-      </Row>
     </Container>
   );
 }

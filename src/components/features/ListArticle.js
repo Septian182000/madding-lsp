@@ -1,11 +1,21 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 import { Row, Col } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import imgArticle from "../../assets/image/article.png";
-import { faComments, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faComments,
+  faTrash,
+  faPenToSquare,
+} from "@fortawesome/free-solid-svg-icons";
 import { ModalDelete } from "./ModalDelete";
+import { ModalEditArticle } from "./ModalEditArticle";
+import { deleteArticle } from "../../lib/state_manager/reducers/articleSlice";
 
 export const ListArticle = ({ data, logged }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [totalComment, setTotalComment] = useState(10);
 
   // show modal delete
@@ -15,9 +25,31 @@ export const ListArticle = ({ data, logged }) => {
   };
   //
 
+  // show modal edit
+  const [modalEdit, setModalEdit] = useState(false);
+  const handleCloseModalEdit = () => {
+    setModalEdit((val) => !val);
+  };
+  //
+
   return (
     <>
-      <ModalDelete isOpen={modalDelete} closeModal={handleCloseModalDelete} />
+      <ModalDelete
+        isOpen={modalDelete}
+        closeModal={handleCloseModalDelete}
+        onDelete={() => {
+          dispatch(deleteArticle({ id: data.id }));
+        }}
+      />
+
+      <ModalEditArticle
+        isOpen={modalEdit}
+        closeModal={handleCloseModalEdit}
+        dataID={data.id}
+        dataTitle={data.title}
+        dataContent={data.content}
+        dataImage={data.image_url}
+      />
       <Row className="mt-4 justify-content-center">
         <Col
           lg={8}
@@ -27,9 +59,11 @@ export const ListArticle = ({ data, logged }) => {
             border: "1px solid black",
             display: "flex",
           }}
+          onClick={() => {
+            navigate(`/article-detail/${data.id}`);
+          }}
         >
           <div
-            className="p-4"
             style={{
               backgroundColor: "#F5F1F1",
               width: 230,
@@ -39,22 +73,59 @@ export const ListArticle = ({ data, logged }) => {
             }}
           >
             <img
-              src={imgArticle}
+              src={data.image_url}
               alt="article"
-              style={{ width: 180, height: 180 }}
+              style={{
+                width: 230,
+                height: "100%",
+                objectFit: "cover",
+                borderTopLeftRadius: 10,
+                borderBottomLeftRadius: 10,
+              }}
             />
           </div>
           <div style={{ marginLeft: 15 }}>
-            <Row className="mt-2">
+            <Row
+              className="mt-2 d-flex"
+              style={{ justifyContent: "space-between" }}
+            >
               <Col>
-                <span
-                  style={{ fontFamily: "Rubik", fontWeight: 600, fontSize: 28 }}
-                >
-                  {data.judul}
-                </span>
+                <Row>
+                  <Col lg={"auto"}>
+                    <span
+                      style={{
+                        fontFamily: "Rubik",
+                        fontWeight: 600,
+                        fontSize: 28,
+                      }}
+                    >
+                      {data.title}
+                    </span>
+                  </Col>
+                  <Col lg={"auto"}>
+                    {logged === "admin" ? (
+                      <FontAwesomeIcon
+                        icon={faPenToSquare}
+                        size="xl"
+                        style={{
+                          marginTop: 7,
+                          fontFamily: "Rubik",
+                          fontWeight: 600,
+                          cursor: "pointer",
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setModalEdit(true);
+                        }}
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </Col>
+                </Row>
               </Col>
-              {logged === "admin" ? (
-                <Col lg={"auto"}>
+              <Col lg={"auto"}>
+                {logged === "admin" ? (
                   <FontAwesomeIcon
                     icon={faTrash}
                     size="xl"
@@ -69,10 +140,10 @@ export const ListArticle = ({ data, logged }) => {
                       setModalDelete(true);
                     }}
                   />
-                </Col>
-              ) : (
-                ""
-              )}
+                ) : (
+                  ""
+                )}
+              </Col>
             </Row>
             <Row className="mt-2">
               <div
@@ -86,14 +157,19 @@ export const ListArticle = ({ data, logged }) => {
                   textOverflow: "ellipsis",
                   display: "-webkit-box",
                   WebkitLineClamp: 5,
+                  height: 200,
                   WebkitBoxOrient: "vertical",
                 }}
               >
                 {data.content}
               </div>
             </Row>
-            <Row className="mt-2 me-1">
-              <div className="d-flex justify-content-end">
+            <Row
+              className="mt-3 mb-3 me-1 "
+              style={{ justifyContent: "space-between" }}
+            >
+              <Col lg={"auto"}></Col>
+              <Col lg={"auto"} className="d-flex">
                 <FontAwesomeIcon
                   icon={faComments}
                   size="xl"
@@ -105,7 +181,7 @@ export const ListArticle = ({ data, logged }) => {
                   }}
                 />
                 <span style={{ fontSize: 18 }}>{totalComment}</span>
-              </div>
+              </Col>
             </Row>
           </div>
         </Col>

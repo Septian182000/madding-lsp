@@ -26,6 +26,8 @@ export default function Login({ setUser, user }) {
       } else {
         setValidation({ ...validation, isUserName: true, isPassword: true });
       }
+    } else if (user === "admin") {
+      window.location.href = "/";
     }
   }, [loginStatus, loginData]);
 
@@ -33,7 +35,7 @@ export default function Login({ setUser, user }) {
     <Container>
       <div
         style={{
-          background: "#DCDCDC",
+          background: "transparent",
           position: "absolute",
           top: "50%",
           left: "50%",
