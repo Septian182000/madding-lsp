@@ -20,6 +20,7 @@ export const ModalAddArticle = ({ isOpen, closeModal, userID }) => {
     setInput({ ...input, admin_id: userID });
   }, [userID]);
 
+  console.log(input);
   return (
     <ModalsView
       closeModal={closeModal}
@@ -118,7 +119,12 @@ export const ModalAddArticle = ({ isOpen, closeModal, userID }) => {
                     onClick={() => {
                       if (input.title && input.image_url && input.content) {
                         dispatch(storeArticle({ newData: input }));
-                        setInput({});
+                        setInput({
+                          ...input,
+                          title: "",
+                          image_url: "",
+                          content: "",
+                        });
                         closeModal();
                       }
                     }}

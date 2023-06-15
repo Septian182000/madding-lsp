@@ -141,7 +141,7 @@ li.list-pagination a, .prev-button-pagination {
 }
 
 .coolinput label.text {
-  font-size: 0.75rem;
+  font-size: 10px;
   color: black;
   font-weight: 700;
   position: relative;
@@ -154,7 +154,7 @@ li.list-pagination a, .prev-button-pagination {
 
 .coolinput input[type=text].input {
   padding: 11px 10px;
-  font-size: 0.75rem;
+  font-size: 16px;
   border: 2px black solid;
   border-radius: 5px;
   background: #ECF8F9;

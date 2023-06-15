@@ -75,6 +75,13 @@ export default function Home({ user, userID, logged }) {
       pageSize: filter.page,
     });
   };
+  const onPageSetting = () => {
+    setPaginationState({
+      pageCount: 0,
+      currentPage: 0,
+      pageSize: filter.page,
+    });
+  };
   //
 
   useEffect(() => {
@@ -148,6 +155,7 @@ export default function Home({ user, userID, logged }) {
           search={search}
           setSearch={setSearch}
           setGetSearch={setGetSearch}
+          onPageSetting={onPageSetting}
         />
       </Row>
 

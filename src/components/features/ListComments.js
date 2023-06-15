@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import moment from "moment/moment";
 import { ModalDelete } from "./ModalDelete";
-import { ModalAddComment } from "./ModalAddComment";
 import { deteleComment } from "../../lib/state_manager/reducers/comentarSlice";
 
 export const ListComments = ({ data, logged }) => {

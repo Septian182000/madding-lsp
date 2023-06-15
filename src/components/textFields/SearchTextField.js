@@ -9,6 +9,7 @@ export const SearchTextField = ({
   search,
   setSearch,
   setGetSearch,
+  onPageSetting,
 }) => {
   return (
     <InputGroup
@@ -45,6 +46,7 @@ export const SearchTextField = ({
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             setGetSearch(search);
+            onPageSetting();
           }
         }}
         value={search}

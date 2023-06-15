@@ -114,7 +114,12 @@ export const ModalAddComment = ({ isOpen, closeModal, articleID }) => {
                 onClick={() => {
                   if (input.name && input.email && input.comment) {
                     dispatch(storeComment({ newData: input }));
-                    setInput({});
+                    setInput({
+                      ...input,
+                      name: "",
+                      email: "",
+                      comment: "",
+                    });
                     closeModal();
                   }
                 }}
