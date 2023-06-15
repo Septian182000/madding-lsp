@@ -7,11 +7,18 @@ import { faPencil, faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment/moment";
 import { ListComments } from "../components/features/ListComments";
 import { Pagination } from "../components/modules/Pagination";
+import notFound from "../assets/image/notFound2.png";
+import { ModalAddComment } from "../components/features/ModalAddComment";
 import {
   getDetailArticle,
   selectDetailArticleData,
   getDetailArticleStatus,
 } from "../lib/state_manager/reducers/detailArticleSlice";
+import {
+  getComments,
+  selectCommentsData,
+  getCommentsStatus,
+} from "../lib/state_manager/reducers/comentarSlice";
 import { dataComment } from "../mockData/dataComment";
 
 export default function ArticleDetail({ logged }) {
@@ -19,6 +26,8 @@ export default function ArticleDetail({ logged }) {
   const dispatch = useDispatch();
   const detailData = useSelector(selectDetailArticleData);
   const detailStatus = useSelector(getDetailArticleStatus);
+  const commentData = useSelector(selectCommentsData);
+  const commentStatus = useSelector(getCommentsStatus);
   //
 
   const params = useParams();
@@ -28,6 +37,13 @@ export default function ArticleDetail({ logged }) {
   const handleShowComments = () => {
     setShowComments((val) => !val);
   };
+
+  // show modal add comment
+  const [modalAddComment, setModalAddComment] = useState(false);
+  const handleShowModalAddComment = () => {
+    setModalAddComment((val) => !val);
+  };
+  //
 
   // set pagination
   const [commentSlice, setCommentSlice] = useState([]);
@@ -51,6 +67,7 @@ export default function ArticleDetail({ logged }) {
 
   useEffect(() => {
     dispatch(getDetailArticle({ id: params.idArticle }));
+    dispatch(getComments({ id: params.idArticle }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -62,14 +79,38 @@ export default function ArticleDetail({ logged }) {
   }, [detailData, detailStatus]);
 
   useEffect(() => {
-    const startIndex = paginationState.currentPage * filter.page;
-    const lastIndex = startIndex + filter.page;
+    if (commentStatus === "success" && commentData) {
+      if (
+        commentData.data === "Success create comment" ||
+        commentData.data === "Success delete comment"
+      ) {
+        dispatch(getComments({ id: params.idArticle }));
+        dispatch(getDetailArticle({ id: params.idArticle }));
+      }
+    }
+  }, [dispatch, commentStatus, commentData]);
 
-    setCommentSlice(dataComment.slice(startIndex, lastIndex));
-  }, [paginationState, filter]);
+  useEffect(() => {
+    if (commentStatus === "success" && commentData) {
+      if (
+        commentData.data !== "Success create comment" &&
+        commentData.data !== "Success delete comment"
+      ) {
+        const startIndex = paginationState.currentPage * filter.page;
+        const lastIndex = startIndex + filter.page;
+
+        setCommentSlice(commentData.data.slice(startIndex, lastIndex));
+      }
+    }
+  }, [commentStatus, commentData, paginationState, filter]);
 
   return (
     <Container className="mt-5">
+      <ModalAddComment
+        isOpen={modalAddComment}
+        closeModal={handleShowModalAddComment}
+        articleID={params.idArticle}
+      />
       <Row className="mb-5">
         <Col lg={6}>
           <Row>
@@ -97,7 +138,10 @@ export default function ArticleDetail({ logged }) {
                   className="mt-3"
                   style={{ fontFamily: "Rubik", fontWeight: 600, height: 46 }}
                 >
-                  Total Komentar : {dataComment.length ?? 0}
+                  Total Komentar :{" "}
+                  {commentStatus === "success"
+                    ? commentData.data.length ?? 0
+                    : 0}
                 </Col>
                 {logged !== "admin" ? (
                   <Col
@@ -109,6 +153,9 @@ export default function ArticleDetail({ logged }) {
                       border: "2px black solid",
                       borderRadius: 10,
                       cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      setModalAddComment(true);
                     }}
                   >
                     <FontAwesomeIcon
@@ -122,18 +169,77 @@ export default function ArticleDetail({ logged }) {
                 )}
               </Row>
               <Row className="mt-3" style={{ overflow: "scroll", height: 350 }}>
-                {commentSlice.map((val, index) => (
-                  <ListComments key={index} data={val} logged={logged} />
-                ))}
-                <Row className="justify-content-center">
-                  <Col lg={"auto"} style={{ marginLeft: 30 }}>
-                    <Pagination
-                      currentPage={paginationState.currentPage}
-                      onPageChange={onPageChange}
-                      pageCount={Math.ceil(dataComment.length / filter.page)}
+                {commentStatus === "success" && commentData.data.length > 0 ? (
+                  commentSlice.map((val, index) => (
+                    <ListComments
+                      key={index}
+                      data={val}
+                      logged={logged}
+                      commentData={commentData}
+                      commentStatus={commentStatus}
+                      setTotalComment
                     />
-                  </Col>
-                </Row>
+                  ))
+                ) : (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginBottom: 20,
+                    }}
+                  >
+                    <figure>
+                      <img
+                        style={{
+                          height: 200,
+                        }}
+                        src={notFound}
+                        alt="not-found"
+                      />
+                      <figcaption className="text-center">
+                        <span
+                          style={{
+                            color: "black",
+                            fontFamily: "Rubik",
+                            fontSize: 18,
+                            fontWeight: 600,
+                          }}
+                        >
+                          No result found
+                        </span>
+                      </figcaption>
+                      <figcaption className="text-center">
+                        <span
+                          style={{
+                            color: "#90909C",
+                            fontFamily: "Rubik",
+                            fontSize: 13,
+                            fontWeight: 600,
+                          }}
+                        >
+                          The data is empty
+                        </span>
+                      </figcaption>
+                    </figure>
+                  </div>
+                )}
+                {commentData.data.length > 0 ? (
+                  <Row className="justify-content-center">
+                    <Col lg={"auto"} style={{ marginLeft: 30 }}>
+                      <Pagination
+                        currentPage={paginationState.currentPage}
+                        onPageChange={onPageChange}
+                        pageCount={Math.ceil(
+                          commentStatus === "success"
+                            ? commentData.data.length / filter.page
+                            : 0 / filter.page
+                        )}
+                      />
+                    </Col>
+                  </Row>
+                ) : (
+                  ""
+                )}
               </Row>
             </Row>
           ) : (

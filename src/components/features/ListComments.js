@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Container, Row, Col } from "react-bootstrap";
 import { generateDiceBearAvatars } from "../../lib/utils/randomImage";
 import { Avatar } from "../imageViewer/Avatar";
@@ -7,15 +7,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import moment from "moment/moment";
 import { ModalDelete } from "./ModalDelete";
+import { ModalAddComment } from "./ModalAddComment";
+import { deteleComment } from "../../lib/state_manager/reducers/comentarSlice";
 
 export const ListComments = ({ data, logged }) => {
+  const dispatch = useDispatch();
+  // show modal delete
   const [modalDelete, setModalDelete] = useState(false);
   const handleShowModalDelete = () => {
     setModalDelete((val) => !val);
   };
+  //
+
   return (
     <Container>
-      <ModalDelete isOpen={modalDelete} closeModal={handleShowModalDelete} />
+      <ModalDelete
+        isOpen={modalDelete}
+        closeModal={handleShowModalDelete}
+        onDelete={() => {
+          dispatch(deteleComment({ id: data.id }));
+        }}
+      />
       <Row
         className="mb-3"
         style={{
@@ -24,6 +36,7 @@ export const ListComments = ({ data, logged }) => {
           marginLeft: 0,
           padding: 10,
           fontFamily: "Rubik",
+          backgroundColor: "#fff",
         }}
       >
         <Row className="mb-2" style={{ justifyContent: "space-between" }}>

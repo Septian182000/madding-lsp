@@ -2,7 +2,14 @@ import { Container } from "react-bootstrap";
 import ReactModal from "react-modal";
 import { useCallback, useEffect, useState } from "react";
 
-export const ModalsView = ({ isOpen, closeModal, content, width, height }) => {
+export const ModalsView = ({
+  isOpen,
+  closeModal,
+  content,
+  width,
+  height,
+  background,
+}) => {
   const [modalWidth, setModalWidth] = useState(width);
 
   const handleWindowResize = useCallback((event) => {
@@ -31,8 +38,8 @@ export const ModalsView = ({ isOpen, closeModal, content, width, height }) => {
             bottom: "auto",
             marginRight: "-50%",
             transform: "translate(-50%, -50%)",
-            backgroundColor: "#3F483B",
-            border: "1px solid #414150",
+            backgroundColor: background ? background : "#3F483B",
+            border: "2px solid #414150",
             padding: 0,
             borderRadius: 8,
             width: modalWidth,

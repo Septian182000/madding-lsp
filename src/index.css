@@ -131,3 +131,37 @@ li.list-pagination a, .prev-button-pagination {
 .add_comment:hover{
   color:green !important
 }
+
+/* style input */
+.coolinput {
+  display: flex;
+  flex-direction: column;
+  position: static;
+  max-width: 240px;
+}
+
+.coolinput label.text {
+  font-size: 0.75rem;
+  color: black;
+  font-weight: 700;
+  position: relative;
+  top: 0.5rem;
+  margin: 0 0 0 7px;
+  padding: 0 3px;
+  background: #ECF8F9;
+  width: fit-content;
+}
+
+.coolinput input[type=text].input {
+  padding: 11px 10px;
+  font-size: 0.75rem;
+  border: 2px black solid;
+  border-radius: 5px;
+  background: #ECF8F9;
+}
+
+.coolinput input[type=text].input:focus {
+  outline: none;
+}
+
+/*  */

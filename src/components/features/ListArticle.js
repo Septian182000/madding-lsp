@@ -1,9 +1,8 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Row, Col } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import imgArticle from "../../assets/image/article.png";
 import {
   faComments,
   faTrash,
@@ -16,6 +15,7 @@ import { deleteArticle } from "../../lib/state_manager/reducers/articleSlice";
 
 export const ListArticle = ({ data, logged }) => {
   const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const [totalComment, setTotalComment] = useState(10);
 
@@ -191,7 +191,7 @@ export const ListArticle = ({ data, logged }) => {
                 />
                 <span style={{ fontSize: 18 }}>Baca Selengkapnya</span>
               </Col>
-              <Col lg={"auto"} className="d-flex">
+              {/* <Col lg={"auto"} className="d-flex">
                 <FontAwesomeIcon
                   icon={faComments}
                   size="xl"
@@ -202,8 +202,8 @@ export const ListArticle = ({ data, logged }) => {
                     fontWeight: 600,
                   }}
                 />
-                <span style={{ fontSize: 18 }}>{totalComment}</span>
-              </Col>
+                <span style={{ fontSize: 18 }}>{totalComment ?? 0}</span>
+              </Col> */}
             </Row>
           </div>
         </Col>

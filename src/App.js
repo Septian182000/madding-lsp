@@ -17,6 +17,7 @@ function App() {
     name: "",
     password: "",
   });
+  const [totalComment, setTotalComment] = useState();
 
   if (user.username !== "") {
     sessionStorage.setItem("id_admin", user.id);
