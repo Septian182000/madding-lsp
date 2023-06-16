@@ -168,13 +168,12 @@ export default function ArticleDetail({ logged }) {
                   ""
                 )}
               </Row>
-              <Row className="mt-3" style={{ overflow: "scroll", height: 350 }}>
+              <Row style={{ overflow: "scroll", height: 350 }}>
                 {commentStatus === "success" && commentData.data.length > 0 ? (
                   commentSlice.map((val, index) => (
                     <ListComments
                       key={index}
                       data={val}
-                      logged={logged}
                       commentData={commentData}
                       commentStatus={commentStatus}
                       setTotalComment

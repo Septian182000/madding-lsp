@@ -10,6 +10,7 @@ import { SearchTextField } from "../components/textFields/SearchTextField";
 import icSearch from "../assets/icons/icSearch.png";
 import { LoadingView } from "../components/loading/LoadingViews";
 import { ListArticle } from "../components/features/ListArticle";
+import { ListArticleUser } from "../components/features/ListArticleUser";
 import { Pagination } from "../components/modules/Pagination";
 import { ModalAddArticle } from "../components/features/ModalAddArticle";
 import { ModalLogout } from "../components/features/ModalLogout";
@@ -208,13 +209,17 @@ export default function Home({ user, userID, logged }) {
           ""
         )}
       </Row>
-      <Row className="mb-4">
+      <Row className="mb-4 justify-content-center">
         {isLoading ? (
           <LoadingView height={400} width={"100%"} />
         ) : articleData.data.length > 0 ? (
-          articleSlice.map((data, index) => (
-            <ListArticle key={index} data={data} logged={logged} />
-          ))
+          articleSlice.map((data, index) =>
+            logged === "admin" ? (
+              <ListArticle key={index} data={data} logged={logged} />
+            ) : (
+              <ListArticleUser key={index} data={data} />
+            )
+          )
         ) : (
           <div
             style={{

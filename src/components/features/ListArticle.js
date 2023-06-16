@@ -11,14 +11,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { ModalDelete } from "./ModalDelete";
 import { ModalEditArticle } from "./ModalEditArticle";
+import { ModalShowComment } from "./ModalShowComment";
 import { deleteArticle } from "../../lib/state_manager/reducers/articleSlice";
-import { ListComments } from "./ListComments";
+import { getComments } from "../../lib/state_manager/reducers/comentarSlice";
 
 export const ListArticle = ({ data, logged }) => {
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
-  const [totalComment, setTotalComment] = useState(10);
 
   // show modal delete
   const [modalDelete, setModalDelete] = useState(false);
@@ -34,6 +33,13 @@ export const ListArticle = ({ data, logged }) => {
   };
   //
 
+  // show modal list comment
+  const [modalComment, setModalComment] = useState(false);
+  const handleCloseModalComment = () => {
+    setModalComment((val) => !val);
+  };
+  //
+
   return (
     <>
       <ModalDelete
@@ -43,7 +49,6 @@ export const ListArticle = ({ data, logged }) => {
           dispatch(deleteArticle({ id: data.id }));
         }}
       />
-
       <ModalEditArticle
         isOpen={modalEdit}
         closeModal={handleCloseModalEdit}
@@ -52,6 +57,16 @@ export const ListArticle = ({ data, logged }) => {
         dataContent={data.content}
         dataImage={data.image_url}
       />
+      <ModalShowComment
+        isOpen={modalComment}
+        closeModal={handleCloseModalComment}
+        id={data.id}
+        logged={logged}
+        onDispatch={() => {
+          dispatch(getComments({ id: data.id }));
+        }}
+      />
+
       <Row className="mt-4 justify-content-center">
         <Col
           lg={8}
@@ -192,19 +207,44 @@ export const ListArticle = ({ data, logged }) => {
                 />
                 <span style={{ fontSize: 18 }}>Baca Selengkapnya</span>
               </Col>
-              {/* <Col lg={"auto"} className="d-flex">
-                <FontAwesomeIcon
-                  icon={faComments}
-                  size="xl"
+              {logged === "admin" ? (
+                <Col
+                  lg={"auto"}
+                  className="d-flex ms-3"
                   style={{
-                    marginTop: 3,
-                    marginRight: 5,
-                    fontFamily: "Rubik",
-                    fontWeight: 600,
+                    backgroundColor: "#DBDFAA",
+                    cursor: "pointer",
+                    padding: 6,
+                    borderRadius: 7,
+                    border: "1px solid black",
+                    color: "white",
                   }}
-                />
-                <span style={{ fontSize: 18 }}>{totalComment ?? 0}</span>
-              </Col> */}
+                  onClick={() => {
+                    setModalComment(true);
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faComments}
+                    size="xl"
+                    style={{
+                      marginRight: 5,
+                      fontFamily: "Rubik",
+                      fontWeight: 600,
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontSize: 18,
+                      color: "black",
+                      fontFamily: "Rubik",
+                    }}
+                  >
+                    Komen
+                  </span>
+                </Col>
+              ) : (
+                ""
+              )}
             </Row>
           </div>
         </Col>
