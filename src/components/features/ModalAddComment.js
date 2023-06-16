@@ -10,6 +10,15 @@ export const ModalAddComment = ({ isOpen, closeModal, articleID }) => {
   const dispatch = useDispatch();
   const [input, setInput] = useState({});
 
+  const handleClearInput = () => {
+    setInput({
+      ...input,
+      name: "",
+      email: "",
+      comment: "",
+    });
+  };
+
   useEffect(() => {
     setInput({ ...input, article_id: articleID });
   }, [articleID]);
@@ -29,7 +38,7 @@ export const ModalAddComment = ({ isOpen, closeModal, articleID }) => {
                 icon={faCircleXmark}
                 style={{ height: 30, cursor: "pointer" }}
                 onClick={() => {
-                  setInput({});
+                  handleClearInput();
                   closeModal();
                 }}
               />
@@ -83,6 +92,12 @@ export const ModalAddComment = ({ isOpen, closeModal, articleID }) => {
             </Col>
           </Row>
           <Row className="p-4">
+            <span
+              className="mb-2"
+              style={{ marginLeft: -8, fontFamily: "Rubik" }}
+            >
+              Comment :
+            </span>
             <textarea
               className="textarea"
               value={input.comment}
@@ -114,12 +129,7 @@ export const ModalAddComment = ({ isOpen, closeModal, articleID }) => {
                 onClick={() => {
                   if (input.name && input.email && input.comment) {
                     dispatch(storeComment({ newData: input }));
-                    setInput({
-                      ...input,
-                      name: "",
-                      email: "",
-                      comment: "",
-                    });
+                    handleClearInput();
                     closeModal();
                   }
                 }}

@@ -8,6 +8,7 @@ import { AppNavbar } from "./components/modules/AppNavbar";
 import Home from "./pages/Home";
 import ArticleDetail from "./pages/ArticleDetail";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import About from "./pages/About";
 
 function App() {
@@ -16,12 +17,12 @@ function App() {
     username: "",
     name: "",
     password: "",
+    role: "",
   });
-  const [totalComment, setTotalComment] = useState();
 
   if (user.username !== "") {
     sessionStorage.setItem("id_admin", user.id);
-    sessionStorage.setItem("role", user.username);
+    sessionStorage.setItem("role", user.role);
     sessionStorage.setItem("role_name", user.name);
   }
 
@@ -34,7 +35,11 @@ function App() {
 
   return (
     <BrowserRouter>
-      {parameter === "100101001" ? "" : <AppNavbar />}
+      {parameter === "100101001" || parameter === "register" ? (
+        ""
+      ) : (
+        <AppNavbar />
+      )}
 
       <Routes>
         <Route
@@ -76,6 +81,17 @@ function App() {
           element={
             <Provider store={dataStrore}>
               <Login setUser={setUser} user={logged} />
+            </Provider>
+          }
+        />
+      </Routes>
+      <Routes>
+        <Route
+          path="/register"
+          exact
+          element={
+            <Provider store={dataStrore}>
+              <Register />
             </Provider>
           }
         />

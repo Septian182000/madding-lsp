@@ -1,4 +1,5 @@
 import { InputGroup, FormControl } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
 export const NormalTextField = ({
@@ -41,7 +42,7 @@ export const NormalTextField = ({
           }}
           onClick={onClicked}
         >
-          <img src={icon} alt="icon" />
+          <FontAwesomeIcon icon={icon} alt="icon" />
         </InputGroup.Text>
       ) : (
         ""

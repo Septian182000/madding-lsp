@@ -12,6 +12,7 @@ import {
 import { ModalDelete } from "./ModalDelete";
 import { ModalEditArticle } from "./ModalEditArticle";
 import { deleteArticle } from "../../lib/state_manager/reducers/articleSlice";
+import { ListComments } from "./ListComments";
 
 export const ListArticle = ({ data, logged }) => {
   const dispatch = useDispatch();

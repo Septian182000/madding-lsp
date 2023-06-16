@@ -1,48 +1,55 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
-import { Container, Col, Row } from "react-bootstrap";
-import { NormalTextField } from "../components/textFields/NormalTextFields";
+import { Container, Row, Col } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router";
 import {
   faUser,
   faLock,
   faEye,
   faEyeSlash,
+  faFileSignature,
+  faCircleCheck,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  getLogin,
-  selectLoginData,
-  getLoginStatus,
-} from "../lib/state_manager/reducers/loginSlice";
+import { NormalTextField } from "../components/textFields/NormalTextFields";
+import SweetAlert2 from "react-sweetalert2";
+import { register } from "../lib/state_manager/reducers/registerSlice";
 
-export default function Login({ setUser, user }) {
-  // redux
-  const dispatch = useDispatch();
-  const loginData = useSelector(selectLoginData);
-  const loginStatus = useSelector(getLoginStatus);
-  //
+export default function Register() {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [input, setInput] = useState({});
+  const [fieldIsError, setFieldIsError] = useState({});
   const [validation, setValidation] = useState({});
   const [passwordType, setPasswordType] = useState("password");
 
-  useEffect(() => {
-    if (loginStatus === "success" && loginData) {
-      if (loginData.data !== "Failed to login") {
-        setUser(loginData.data);
-        window.location.href = "/";
-      } else {
-        setValidation({ ...validation, isUserName: true, isPassword: true });
-      }
-    } else if (user === "admin") {
-      window.location.href = "/";
-    }
-  }, [loginStatus, loginData]);
+  const [sweetAlert, setSweetAlert] = useState({});
+  function handleClickShowAlert() {
+    setSweetAlert({
+      show: true,
+      confirmButtonColor: "green",
+      confirmButtonText: "Login",
+    });
+  }
 
   return (
     <Container>
+      <SweetAlert2
+        {...sweetAlert}
+        didClose={() => {
+          navigate("/100101001");
+        }}
+      >
+        <h1 style={{ fontFamily: "Rubik" }}>Register Success</h1>
+        <Row className="mt-5 mb-4 justify-content-center">
+          <Col lg={"auto"}>
+            <FontAwesomeIcon
+              icon={faCircleCheck}
+              style={{ height: 90, color: "grey" }}
+            />
+          </Col>
+        </Row>
+      </SweetAlert2>
       <div
         style={{
           background: "transparent",
@@ -64,14 +71,9 @@ export default function Login({ setUser, user }) {
               textAlign: "center",
             }}
           >
-            Hello, Welcome back
+            Register your data !
           </span>
         </Row>
-        {/* <Row className="mb-3">
-          <span style={{ fontFamily: "Rubik", fontSize: 20, fontWeight: 500 }}>
-            Username
-          </span>
-        </Row> */}
         <Row className="mb-3">
           <Col lg={"auto"} className="d-flex">
             <FontAwesomeIcon
@@ -93,11 +95,27 @@ export default function Login({ setUser, user }) {
             />
           </Col>
         </Row>
-        {/* <Row className="mb-3">
-          <span style={{ fontFamily: "Rubik", fontSize: 20, fontWeight: 500 }}>
-            Pasword
-          </span>
-        </Row> */}
+        <Row className="mb-3">
+          <Col lg={"auto"} className="d-flex">
+            <FontAwesomeIcon
+              icon={faFileSignature}
+              style={{ height: 20, margin: "auto 0" }}
+            />
+          </Col>
+          <Col>
+            <NormalTextField
+              placeholder={"Insert Your Name"}
+              input={input.name}
+              onChanged={(e) => {
+                setInput({
+                  ...input,
+                  name: e.target.value,
+                });
+                setValidation({ ...validation, isName: false });
+              }}
+            />
+          </Col>
+        </Row>
         <Row className="mb-3">
           <Col lg={"auto"} className="d-flex">
             <FontAwesomeIcon
@@ -127,32 +145,26 @@ export default function Login({ setUser, user }) {
           </Col>
         </Row>
         <Row
-          className="mb-4"
+          className="justify-content-start mb-4"
           style={{
             fontFamily: "Rubik",
-            justifyContent: "space-between",
+            textDecoration: "underline",
             color: "blue",
             cursor: "pointer",
           }}
           onClick={() => {
-            navigate("/register");
+            navigate("/100101001");
           }}
         >
-          <Col lg={"auto"}>
-            {" "}
-            {validation.isUserName && validation.isPassword ? (
-              <span style={{ fontFamily: "Rubik", color: "red" }}>
-                *Failed to login
-              </span>
-            ) : (
-              ""
-            )}
-          </Col>
-          <Col lg={"auto"} style={{ textDecoration: "underline" }}>
-            Register Account
-          </Col>
+          <Col lg={"auto"}>Login Account</Col>
         </Row>
-
+        {validation.isUserName || validation.isName || validation.isPassword ? (
+          <span style={{ fontFamily: "Rubik", color: "red" }}>
+            *Failed to register
+          </span>
+        ) : (
+          ""
+        )}
         <div className="d-flex justify-content-center mt-2">
           <div>
             <button
@@ -168,15 +180,25 @@ export default function Login({ setUser, user }) {
                 border: "1px solid black",
               }}
               onClick={() => {
-                dispatch(
-                  getLogin({
-                    username: input.username,
-                    password: input.password,
-                  })
-                );
+                if (
+                  input.username !== "" &&
+                  input.name !== "" &&
+                  input.password
+                ) {
+                  dispatch(register({ newData: input }));
+                  handleClickShowAlert();
+                  setInput({});
+                } else {
+                  setFieldIsError({
+                    ...validation,
+                    isName: true,
+                    isUserName: true,
+                    isPassword: true,
+                  });
+                }
               }}
             >
-              <span>Login</span>
+              <span>Register</span>
             </button>
           </div>
         </div>

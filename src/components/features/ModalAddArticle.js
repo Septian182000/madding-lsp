@@ -11,16 +11,19 @@ export const ModalAddArticle = ({ isOpen, closeModal, userID }) => {
   const dispatch = useDispatch();
   const [input, setInput] = useState({});
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    setInput({ ...input, image: URL.createObjectURL(file) });
+  const handleClearInput = () => {
+    setInput({
+      ...input,
+      title: "",
+      image_url: "",
+      content: "",
+    });
   };
 
   useEffect(() => {
     setInput({ ...input, admin_id: userID });
   }, [userID]);
 
-  console.log(input);
   return (
     <ModalsView
       closeModal={closeModal}
@@ -96,7 +99,7 @@ export const ModalAddArticle = ({ isOpen, closeModal, userID }) => {
                       border: "1px solid black",
                     }}
                     onClick={() => {
-                      setInput({});
+                      handleClearInput();
                       closeModal();
                     }}
                   >
@@ -119,12 +122,7 @@ export const ModalAddArticle = ({ isOpen, closeModal, userID }) => {
                     onClick={() => {
                       if (input.title && input.image_url && input.content) {
                         dispatch(storeArticle({ newData: input }));
-                        setInput({
-                          ...input,
-                          title: "",
-                          image_url: "",
-                          content: "",
-                        });
+                        handleClearInput();
                         closeModal();
                       }
                     }}
