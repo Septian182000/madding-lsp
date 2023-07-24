@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Container, Row, Col } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,7 +15,7 @@ import { NormalTextField } from "../components/textFields/NormalTextFields";
 import SweetAlert2 from "react-sweetalert2";
 import { register } from "../lib/state_manager/reducers/registerSlice";
 
-export default function Register() {
+export default function Register({ user }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [input, setInput] = useState({});
@@ -31,6 +31,12 @@ export default function Register() {
       confirmButtonText: "Login",
     });
   }
+
+  useEffect(() => {
+    if (user === "admin") {
+      window.location.href = "/";
+    }
+  }, [user]);
 
   return (
     <Container>
@@ -57,7 +63,7 @@ export default function Register() {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: 400,
+          width: 450,
           padding: 30,
           borderRadius: 10,
         }}
@@ -72,6 +78,11 @@ export default function Register() {
             }}
           >
             Register your data !
+          </span>
+        </Row>
+        <Row className="mb-3">
+          <span style={{ fontFamily: "Rubik", fontSize: 20, fontWeight: 500 }}>
+            Username
           </span>
         </Row>
         <Row className="mb-3">
@@ -96,6 +107,11 @@ export default function Register() {
           </Col>
         </Row>
         <Row className="mb-3">
+          <span style={{ fontFamily: "Rubik", fontSize: 20, fontWeight: 500 }}>
+            Name
+          </span>
+        </Row>
+        <Row className="mb-3">
           <Col lg={"auto"} className="d-flex">
             <FontAwesomeIcon
               icon={faFileSignature}
@@ -115,6 +131,11 @@ export default function Register() {
               }}
             />
           </Col>
+        </Row>
+        <Row className="mb-3">
+          <span style={{ fontFamily: "Rubik", fontSize: 20, fontWeight: 500 }}>
+            Pasword
+          </span>
         </Row>
         <Row className="mb-3">
           <Col lg={"auto"} className="d-flex">

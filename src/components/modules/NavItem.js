@@ -17,7 +17,7 @@ export const NavItem = (props) => {
   };
 
   const inActiveStyle = {
-    color: "black",
+    color: "grey",
     textDecoration: "none",
     fontFamily: "Rubik",
     fontWeight: 400,

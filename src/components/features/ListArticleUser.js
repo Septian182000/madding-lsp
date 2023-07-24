@@ -1,14 +1,7 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Row, Col } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faComments,
-  faTrash,
-  faPenToSquare,
-  faBookOpenReader,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBookOpenReader } from "@fortawesome/free-solid-svg-icons";
 export const ListArticleUser = ({ data }) => {
   const navigate = useNavigate();
 

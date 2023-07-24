@@ -159,7 +159,6 @@ export default function Home({ user, userID, logged }) {
           onPageSetting={onPageSetting}
         />
       </Row>
-
       <Row className="mt-5 " style={{ justifyContent: "space-between" }}>
         <Col
           lg={"auto"}

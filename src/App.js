@@ -91,7 +91,7 @@ function App() {
           exact
           element={
             <Provider store={dataStrore}>
-              <Register />
+              <Register user={logged} />
             </Provider>
           }
         />

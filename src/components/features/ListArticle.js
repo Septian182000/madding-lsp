@@ -230,6 +230,7 @@ export const ListArticle = ({ data, logged }) => {
                       marginRight: 5,
                       fontFamily: "Rubik",
                       fontWeight: 600,
+                      color: "#9AC5F4",
                     }}
                   />
                   <span
@@ -239,7 +240,7 @@ export const ListArticle = ({ data, logged }) => {
                       fontFamily: "Rubik",
                     }}
                   >
-                    Komen
+                    Komentar
                   </span>
                 </Col>
               ) : (

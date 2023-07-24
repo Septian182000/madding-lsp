@@ -50,7 +50,7 @@ export default function Login({ setUser, user }) {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: 400,
+          width: 450,
           padding: 30,
           borderRadius: 10,
         }}
@@ -67,11 +67,11 @@ export default function Login({ setUser, user }) {
             Hello, Welcome back
           </span>
         </Row>
-        {/* <Row className="mb-3">
+        <Row className="mb-3">
           <span style={{ fontFamily: "Rubik", fontSize: 20, fontWeight: 500 }}>
             Username
           </span>
-        </Row> */}
+        </Row>
         <Row className="mb-3">
           <Col lg={"auto"} className="d-flex">
             <FontAwesomeIcon
@@ -93,11 +93,11 @@ export default function Login({ setUser, user }) {
             />
           </Col>
         </Row>
-        {/* <Row className="mb-3">
+        <Row className="mb-3">
           <span style={{ fontFamily: "Rubik", fontSize: 20, fontWeight: 500 }}>
             Pasword
           </span>
-        </Row> */}
+        </Row>
         <Row className="mb-3">
           <Col lg={"auto"} className="d-flex">
             <FontAwesomeIcon
@@ -139,7 +139,6 @@ export default function Login({ setUser, user }) {
           }}
         >
           <Col lg={"auto"}>
-            {" "}
             {validation.isUserName && validation.isPassword ? (
               <span style={{ fontFamily: "Rubik", color: "red" }}>
                 *Failed to login
