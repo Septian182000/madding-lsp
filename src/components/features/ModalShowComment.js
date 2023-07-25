@@ -49,7 +49,7 @@ export const ModalShowComment = ({
 
   useEffect(() => {
     if (commentStatus === "success" && commentData) {
-      if (commentData.data === "Success delete comment") {
+      if (commentData.data === "Success delete comment" || commentData.data === "Success update comment") {
         onDispatch();
       }
     }
@@ -57,7 +57,7 @@ export const ModalShowComment = ({
 
   useEffect(() => {
     if (commentStatus === "success" && commentData) {
-      if (commentData.data !== "Success delete comment") {
+      if (commentData.data !== "Success delete comment" && commentData.data !== "Success update comment") {
         const startIndex = paginationState.currentPage * filter.page;
         const lastIndex = startIndex + filter.page;
 

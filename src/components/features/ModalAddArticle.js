@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { ModalsView } from "../modals/ModalViews";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Form} from "react-bootstrap";
 import { NormalTextField } from "../textFields/NormalTextFields";
 import { Avatar } from "../imageViewer/Avatar";
 import { TextEditor } from "../textFields/TextEditor";
@@ -11,12 +11,14 @@ export const ModalAddArticle = ({ isOpen, closeModal, userID }) => {
   const dispatch = useDispatch();
   const [input, setInput] = useState({});
 
+
   const handleClearInput = () => {
     setInput({
       ...input,
       title: "",
       image_url: "",
       content: "",
+      hide_comment: ""
     });
   };
 
@@ -82,6 +84,39 @@ export const ModalAddArticle = ({ isOpen, closeModal, userID }) => {
                       });
                     }}
                   />
+                </Col>
+              </Row>
+              <Row
+                style={{ color: "white", fontFamily: "Rubik", fontSize: 16 }}
+              >
+                *Configuration Comment
+              </Row>
+              <Row className="mt-2 mb-4">
+                <Col lg={"auto"} style={{marginRight: -15}}>
+                  <Form.Check
+                    type={"radio"}
+                    onChange={() => {
+                     setInput({...input, hide_comment: "0"})
+                    }}
+                    checked={input.hide_comment === "0"}
+                  />
+                  
+                </Col>
+                <Col lg={"auto"} style={{color:"white", marginRight:20}}>
+                  Show Comment
+                </Col>
+                <Col lg={"auto"} style={{marginRight: -15}}>
+                  <Form.Check
+                    type={"radio"}
+                    onChange={() => {
+                     setInput({...input, hide_comment: "1"})
+                    }}
+                    checked={input.hide_comment === "1"}
+                  />
+                  
+                </Col>
+                <Col lg={"auto"} style={{color:"white"}}>
+                  Hide Comment
                 </Col>
               </Row>
               <div className="d-flex justify-content-center gap-3 mt-4">

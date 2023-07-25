@@ -19,7 +19,7 @@ export const AppNavbar = () => {
     <Container fluid style={navbarStyle}>
       <Row className="justify-content-center">
         <Col lg={"auto"} style={{ paddingTop: 5 }}>
-          <NavItem to={"/"}>Home</NavItem>
+          <NavItem to={"/dashboard"}>Dashboard</NavItem>
         </Col>
         <Col lg={"auto"}>
           <div

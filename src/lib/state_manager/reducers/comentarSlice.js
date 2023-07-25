@@ -20,6 +20,22 @@ export const storeComment = createAsyncThunk(
   }
 );
 
+export const updateComment = createAsyncThunk(
+  "update/comment",
+  async ({ id, newData, rejectedWithValue }) => {
+    try {
+      const formData = new FormData()
+      formData.append("hide_comment", newData)
+
+      const apiURL = `comments/update/${id}`;
+      const response = await axiosInstance.put(apiURL, formData);
+      return response.data;
+    } catch (error) {
+      return rejectedWithValue(error.response.data);
+    }
+  }
+);
+
 export const deteleComment = createAsyncThunk(
   "delete/comment",
   async ({ id, rejectedWithValue }) => {
@@ -32,6 +48,7 @@ export const deteleComment = createAsyncThunk(
     }
   }
 );
+
 
 const initialState = {
   data: {},
@@ -56,6 +73,13 @@ export const comentarSlice = createSlice({
       })
       .addCase(storeComment.rejected, (state) => {
         state.status = "failed store";
+      })
+      .addCase(updateComment.fulfilled, (state, action) => {
+        state.data = action.payload;
+        state.status = "success";
+      })
+      .addCase(updateComment.rejected, (state) => {
+        state.status = "failed update";
       })
       .addCase(deteleComment.fulfilled, (state, action) => {
         state.data = action.payload;

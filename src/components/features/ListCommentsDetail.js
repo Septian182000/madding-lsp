@@ -9,7 +9,7 @@ import moment from "moment/moment";
 import { ModalDelete } from "./ModalDelete";
 import { deteleComment , updateComment} from "../../lib/state_manager/reducers/comentarSlice";
 
-export const ListComments = ({ data, logged }) => {
+export const ListCommentsDetail = ({ data, logged }) => {
   const dispatch = useDispatch();
   // show modal delete
   const [modalDelete, setModalDelete] = useState(false);
@@ -46,6 +46,7 @@ export const ListComments = ({ data, logged }) => {
           padding: 10,
           fontFamily: "Rubik",
           backgroundColor: "#fff",
+          display: data.hide_comment === "1" ? "none" : ""
         }}
       >
         <Row className="mb-2" style={{ justifyContent: "space-between" }}>

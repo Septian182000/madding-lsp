@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { ModalsView } from "../modals/ModalViews";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col,Form} from "react-bootstrap";
 import { NormalTextField } from "../textFields/NormalTextFields";
 import { editArticle } from "../../lib/state_manager/reducers/articleSlice";
 
@@ -12,6 +12,7 @@ export const ModalEditArticle = ({
   dataTitle,
   dataContent,
   dataImage,
+  dataHide
 }) => {
   const dispatch = useDispatch();
   const [input, setInput] = useState({});
@@ -22,8 +23,9 @@ export const ModalEditArticle = ({
       title: dataTitle,
       content: dataContent,
       image_url: dataImage,
+      hide_comment: dataHide
     });
-  }, [dataTitle, dataContent, dataImage]);
+  }, [dataTitle, dataContent, dataImage,dataHide]);
 
   return (
     <ModalsView
@@ -83,6 +85,34 @@ export const ModalEditArticle = ({
                       });
                     }}
                   />
+                </Col>
+              </Row>
+              <Row className="mt-2 mb-4">
+                <Col lg={"auto"} style={{marginRight: -15}}>
+                  <Form.Check
+                    type={"radio"}
+                    onChange={() => {
+                     setInput({...input, hide_comment: "0"})
+                    }}
+                    checked={input.hide_comment === "0"}
+                  />
+                  
+                </Col>
+                <Col lg={"auto"} style={{color:"white", marginRight:20}}>
+                  Show Comment
+                </Col>
+                <Col lg={"auto"} style={{marginRight: -15}}>
+                  <Form.Check
+                    type={"radio"}
+                    onChange={() => {
+                     setInput({...input, hide_comment: "1"})
+                    }}
+                    checked={input.hide_comment === "1"}
+                  />
+                  
+                </Col>
+                <Col lg={"auto"} style={{color:"white"}}>
+                  Hide Comment
                 </Col>
               </Row>
               <div className="d-flex justify-content-center gap-3 mt-4">

@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
 import { dataStrore } from "./lib/state_manager/store";
 import { AppNavbar } from "./components/modules/AppNavbar";
+import LandingPage from "./pages/LandingPage";
 import Home from "./pages/Home";
 import ArticleDetail from "./pages/ArticleDetail";
 import Login from "./pages/Login";
@@ -40,10 +41,21 @@ function App() {
       ) : (
         <AppNavbar />
       )}
-
+    
       <Routes>
         <Route
           path="/"
+          exact
+          element={
+            <Provider store={dataStrore}>
+              <LandingPage logged={logged} user={loggedName} userID={loggedID} />
+            </Provider>
+          }
+        />
+      </Routes>
+      <Routes>
+        <Route
+          path="/dashboard"
           exact
           element={
             <Provider store={dataStrore}>

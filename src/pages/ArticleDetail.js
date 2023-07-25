@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment/moment";
 import { ListComments } from "../components/features/ListComments";
+import { ListCommentsDetail } from "../components/features/ListCommentsDetail";
 import { Pagination } from "../components/modules/Pagination";
 import notFound from "../assets/image/notFound2.png";
 import { ModalAddComment } from "../components/features/ModalAddComment";
@@ -171,7 +172,7 @@ export default function ArticleDetail({ logged }) {
               <Row style={{ overflow: "scroll", height: 350 }}>
                 {commentStatus === "success" && commentData.data.length > 0 ? (
                   commentSlice.map((val, index) => (
-                    <ListComments
+                    <ListCommentsDetail
                       key={index}
                       data={val}
                       commentData={commentData}
@@ -244,6 +245,7 @@ export default function ArticleDetail({ logged }) {
           ) : (
             ""
           )}
+          {data.hide_comment !== "1" ? 
           <Row className="justify-content-center mt-3">
             <Col
               className="button_show_comment"
@@ -260,7 +262,7 @@ export default function ArticleDetail({ logged }) {
             >
               {showComments ? "Hide Comments" : "Show Comments"}
             </Col>
-          </Row>
+          </Row> : ""}
         </Col>
         <Col lg={6}>
           <Row>

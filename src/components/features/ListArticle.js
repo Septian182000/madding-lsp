@@ -56,6 +56,7 @@ export const ListArticle = ({ data, logged }) => {
         dataTitle={data.title}
         dataContent={data.content}
         dataImage={data.image_url}
+        dataHide={data.hide_comment}
       />
       <ModalShowComment
         isOpen={modalComment}
@@ -207,7 +208,7 @@ export const ListArticle = ({ data, logged }) => {
                 />
                 <span style={{ fontSize: 18 }}>Baca Selengkapnya</span>
               </Col>
-              {logged === "admin" ? (
+              {logged === "admin" && data.hide_comment !== "1" ? (
                 <Col
                   lg={"auto"}
                   className="d-flex ms-3"

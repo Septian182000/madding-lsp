@@ -32,12 +32,12 @@ export default function Login({ setUser, user }) {
     if (loginStatus === "success" && loginData) {
       if (loginData.data !== "Failed to login") {
         setUser(loginData.data);
-        window.location.href = "/";
+        window.location.href = "/dashboard";
       } else {
         setValidation({ ...validation, isUserName: true, isPassword: true });
       }
     } else if (user === "admin") {
-      window.location.href = "/";
+      window.location.href = "/dashboard";
     }
   }, [loginStatus, loginData]);
 
